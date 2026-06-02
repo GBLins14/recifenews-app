@@ -44,12 +44,52 @@ class InMemoryHomeFeedRepository : HomeFeedRepository {
     private val currentUser = UserProfile(
         id = "user-joao-silva",
         name = "João Silva",
-        mainNeighborhood = "Boa Viagem",
-        followedNeighborhoods = listOf("Bairro do Recife", "Derby", "Casa Amarela", "Várzea")
+        mainNeighborhood = "Afogados",
+        followedNeighborhoods = listOf("Boa Vista", "Derby", "Casa Amarela", "Boa Viagem")
     )
 
     private fun seedPosts(): List<FeedPost> {
         return listOf(
+            FeedPost(
+                id = 8,
+                author = "Maria",
+                neighborhood = "Afogados",
+                timeLabel = "8 min",
+                category = HomeCatalog.category("alerts"),
+                body = "Rua alagada perto da praça, trânsito lento no local.",
+                imageKey = PostImageKey.Mapa,
+                reactionCounts = mapOf("like" to 12),
+                comments = 5,
+                shares = 3,
+                trendScore = 96,
+                pinned = true
+            ),
+            FeedPost(
+                id = 7,
+                author = "João",
+                neighborhood = "Afogados",
+                timeLabel = "14 min",
+                category = HomeCatalog.category("traffic"),
+                body = "Poste apagado na esquina desde cedo.",
+                imageKey = PostImageKey.Alerta,
+                reactionCounts = mapOf("like" to 8),
+                comments = 3,
+                shares = 2,
+                trendScore = 88
+            ),
+            FeedPost(
+                id = 6,
+                author = "Ana",
+                neighborhood = "Afogados",
+                timeLabel = "22 min",
+                category = HomeCatalog.category("culture"),
+                body = "Feirinha da comunidade começa às 18h hoje.",
+                imageKey = PostImageKey.Comunidade,
+                reactionCounts = mapOf("like" to 15),
+                comments = 6,
+                shares = 4,
+                trendScore = 82
+            ),
             FeedPost(
                 id = 5,
                 author = "João Silva",

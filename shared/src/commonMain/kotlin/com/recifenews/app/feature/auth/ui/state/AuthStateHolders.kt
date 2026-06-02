@@ -3,6 +3,7 @@ package com.recifenews.app.feature.auth.ui.state
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.recifenews.app.feature.auth.domain.model.AuthResult
 import com.recifenews.app.feature.auth.domain.model.LoginRequest
 import com.recifenews.app.feature.auth.domain.model.RecoveryRequest
 import com.recifenews.app.feature.auth.domain.model.RegisterRequest
@@ -28,15 +29,38 @@ class LoginStateHolder(
         state = state.copy(showPassword = !state.showPassword)
     }
 
-    fun submit(): Boolean {
+    suspend fun submit(): Boolean {
         if (!state.canSubmit) return false
-        repository.login(LoginRequest(state.email, state.password))
-        return true
+
+        state = state.copy(isLoading = true, feedback = null)
+        return when (val result = repository.login(LoginRequest(state.email.trim(), state.password))) {
+            is AuthResult.Success -> {
+                state = state.copy(isLoading = false)
+                true
+            }
+            is AuthResult.Failure -> {
+                state = state.copy(isLoading = false, feedback = result.error.message)
+                false
+            }
+        }
     }
 
-    fun loginWithProvider(provider: SocialAuthProvider): Boolean {
-        repository.loginWithProvider(provider)
-        return true
+    suspend fun loginWithProvider(provider: SocialAuthProvider): Boolean {
+        state = state.copy(isLoading = true, feedback = null)
+        return when (val result = repository.loginWithProvider(provider)) {
+            is AuthResult.Success -> {
+                state = state.copy(isLoading = false)
+                true
+            }
+            is AuthResult.Failure -> {
+                state = state.copy(isLoading = false, feedback = result.error.message)
+                false
+            }
+        }
+    }
+
+    fun dismissFeedback() {
+        state = state.copy(feedback = null)
     }
 }
 
@@ -74,7 +98,7 @@ class RegisterStateHolder(
         state = state.copy(showConfirmPassword = !state.showConfirmPassword)
     }
 
-    fun submit(): Boolean {
+    suspend fun submit(): Boolean {
         val name = AuthValidator.name(state.name)
         val email = AuthValidator.email(state.email)
         val password = AuthValidator.password(state.password)
@@ -90,19 +114,39 @@ class RegisterStateHolder(
             return false
         }
 
-        repository.register(
-            RegisterRequest(
-                name = state.name,
-                email = state.email,
-                password = state.password
+        state = state.copy(isLoading = true, feedback = null)
+        return when (
+            val result = repository.register(
+                RegisterRequest(
+                    name = state.name.trim(),
+                    email = state.email.trim(),
+                    password = state.password
+                )
             )
-        )
-        return true
+        ) {
+            is AuthResult.Success -> {
+                state = state.copy(isLoading = false)
+                true
+            }
+            is AuthResult.Failure -> {
+                state = state.copy(isLoading = false, feedback = result.error.message)
+                false
+            }
+        }
     }
 
-    fun registerWithProvider(provider: SocialAuthProvider): Boolean {
-        repository.loginWithProvider(provider)
-        return true
+    suspend fun registerWithProvider(provider: SocialAuthProvider): Boolean {
+        state = state.copy(isLoading = true, feedback = null)
+        return when (val result = repository.loginWithProvider(provider)) {
+            is AuthResult.Success -> {
+                state = state.copy(isLoading = false)
+                true
+            }
+            is AuthResult.Failure -> {
+                state = state.copy(isLoading = false, feedback = result.error.message)
+                false
+            }
+        }
     }
 
     fun dismissFeedback() {
@@ -129,15 +173,25 @@ class RecoveryStateHolder(
         state = state.copy(email = value)
     }
 
-    fun submit() {
+    suspend fun submit() {
         val email = AuthValidator.email(state.email)
         if (!email.isValid) {
             state = state.copy(feedback = email.message)
             return
         }
 
-        repository.requestPasswordRecovery(RecoveryRequest(state.email))
-        state = state.copy(feedback = "Enviamos as instruções para ${state.email.trim()}.")
+        state = state.copy(isLoading = true, feedback = null)
+        when (val result = repository.requestPasswordRecovery(RecoveryRequest(state.email.trim()))) {
+            is AuthResult.Success -> {
+                state = state.copy(
+                    isLoading = false,
+                    feedback = "Enviamos as instruções para ${state.email.trim()}."
+                )
+            }
+            is AuthResult.Failure -> {
+                state = state.copy(isLoading = false, feedback = result.error.message)
+            }
+        }
     }
 
     fun dismissFeedback() {

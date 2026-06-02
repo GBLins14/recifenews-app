@@ -14,31 +14,95 @@ class HomeStateHolder(
     var state by mutableStateOf(HomeUiState.from(repository.loadFeed()))
         private set
 
-    fun toggleSearch() {
+    fun toggleSearchPanel() {
+        val nextVisibility = !state.showSearchPanel
         state = state.copy(
-            showSearch = !state.showSearch,
-            searchQuery = if (state.showSearch) "" else state.searchQuery
+            showSearchPanel = nextVisibility,
+            searchQuery = if (nextVisibility) state.searchQuery else "",
+            showNeighborhoodPicker = false,
+            showComposer = false,
+            selectedNavigationItem = HomeNavigationItem.Home
         )
     }
 
     fun onSearchChanged(query: String) {
-        state = state.copy(searchQuery = query)
+        state = state.copy(
+            searchQuery = query,
+            showSearchPanel = true
+        )
     }
 
     fun toggleNeighborhoodPicker() {
-        state = state.copy(showNeighborhoodPicker = !state.showNeighborhoodPicker)
+        val nextVisibility = !state.showNeighborhoodPicker
+        state = state.copy(
+            selectedNavigationItem = if (nextVisibility) HomeNavigationItem.Neighborhoods else HomeNavigationItem.Home,
+            showNeighborhoodPicker = nextVisibility,
+            showSearchPanel = false,
+            showComposer = false
+        )
+    }
+
+    fun selectNavigationItem(item: HomeNavigationItem) {
+        state = when (item) {
+            HomeNavigationItem.Home -> state.copy(
+                selectedNavigationItem = item,
+                showNeighborhoodPicker = false,
+                showSearchPanel = false,
+                showComposer = false
+            )
+            HomeNavigationItem.Community -> state.copy(
+                selectedNavigationItem = item,
+                showNeighborhoodPicker = false,
+                showSearchPanel = false,
+                showComposer = false
+            )
+            HomeNavigationItem.Neighborhoods -> state.copy(
+                selectedNavigationItem = item,
+                showNeighborhoodPicker = !state.showNeighborhoodPicker,
+                showSearchPanel = false,
+                showComposer = false
+            )
+            HomeNavigationItem.Alerts -> state.copy(
+                selectedNavigationItem = item,
+                showNeighborhoodPicker = false,
+                showSearchPanel = false,
+                showComposer = false,
+                feedback = "Central de alertas em breve."
+            )
+            HomeNavigationItem.Profile -> state.copy(
+                selectedNavigationItem = item,
+                showNeighborhoodPicker = false,
+                showSearchPanel = false,
+                showComposer = false,
+                feedback = "Perfil em breve."
+            )
+            HomeNavigationItem.NewPost -> toggleComposerState()
+        }
+    }
+
+    fun toggleComposer() {
+        state = toggleComposerState()
     }
 
     fun selectNeighborhood(neighborhood: String) {
         state = state.copy(
             selectedNeighborhood = neighborhood,
             showNeighborhoodPicker = false,
+            showSearchPanel = false,
+            selectedNavigationItem = HomeNavigationItem.Home,
             searchQuery = ""
         )
     }
 
     fun selectTab(tab: FeedTab) {
         state = state.copy(selectedTab = tab)
+    }
+
+    fun selectFeedCategory(categoryId: String?) {
+        state = state.copy(
+            selectedFeedCategoryId = if (state.selectedFeedCategoryId == categoryId) null else categoryId,
+            selectedTab = FeedTab.Todos
+        )
     }
 
     fun onPostTextChanged(text: String) {
@@ -68,12 +132,18 @@ class HomeStateHolder(
             interactions = state.interactions + (post.id to PostInteraction()),
             newPostText = "",
             selectedTab = FeedTab.Todos,
+            selectedNavigationItem = HomeNavigationItem.Home,
+            showComposer = false,
             feedback = "Publicação criada em ${state.selectedNeighborhood}."
         )
     }
 
     fun dismissFeedback() {
         state = state.copy(feedback = null)
+    }
+
+    fun showOfferComingSoon() {
+        state = state.copy(feedback = "Ver agora em breve.")
     }
 
     fun toggleReactionTray(postId: Int) {
@@ -176,5 +246,15 @@ class HomeStateHolder(
 
     private fun nextPostId(): Int {
         return (state.posts.maxOfOrNull { it.id } ?: 0) + 1
+    }
+
+    private fun toggleComposerState(): HomeUiState {
+        val nextVisibility = !state.showComposer
+        return state.copy(
+            selectedNavigationItem = HomeNavigationItem.Home,
+            showComposer = nextVisibility,
+            showSearchPanel = false,
+            showNeighborhoodPicker = false
+        )
     }
 }

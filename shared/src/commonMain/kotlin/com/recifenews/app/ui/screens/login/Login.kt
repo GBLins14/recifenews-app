@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +23,7 @@ import com.recifenews.app.ui.components.AppButton
 import com.recifenews.app.ui.components.AppButtonStyle
 import com.recifenews.app.ui.screens.auth.components.AuthDivider
 import com.recifenews.app.ui.screens.auth.components.AuthEmailField
+import com.recifenews.app.ui.screens.auth.components.AuthFeedback
 import com.recifenews.app.ui.screens.auth.components.AuthFooterLink
 import com.recifenews.app.ui.screens.auth.components.AuthPasswordField
 import com.recifenews.app.ui.screens.auth.components.AuthScreenScaffold
@@ -29,6 +31,7 @@ import com.recifenews.app.ui.screens.auth.components.AuthTitle
 import com.recifenews.app.ui.screens.auth.components.SocialAuthButtons
 import com.recifenews.app.ui.theme.AppColors
 import com.recifenews.app.ui.preview.AppPreview
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -40,6 +43,7 @@ fun LoginScreen(
         LoginStateHolder(dependencies.authRepository)
     }
     val state = stateHolder.state
+    val coroutineScope = rememberCoroutineScope()
 
     AuthScreenScaffold(showBack = false, onBack = onBack) {
         AuthTitle(
@@ -48,6 +52,11 @@ fun LoginScreen(
         )
 
         Spacer(modifier = Modifier.height(56.dp))
+
+        AuthFeedback(
+            message = state.feedback,
+            onClose = stateHolder::dismissFeedback
+        )
 
         AuthEmailField(
             value = state.email,
@@ -88,9 +97,12 @@ fun LoginScreen(
             text = "Entrar",
             style = AppButtonStyle.Blue,
             enabled = state.canSubmit,
+            isLoading = state.isLoading,
             onClick = {
-                if (stateHolder.submit()) {
-                    onNavigate(Screen.Home)
+                coroutineScope.launch {
+                    if (stateHolder.submit()) {
+                        onNavigate(Screen.Home)
+                    }
                 }
             }
         )
@@ -105,8 +117,10 @@ fun LoginScreen(
             googleText = "Continuar com Google",
             appleText = "Continuar com Apple",
             onProviderClick = {
-                if (stateHolder.loginWithProvider(it)) {
-                    onNavigate(Screen.Home)
+                coroutineScope.launch {
+                    if (stateHolder.loginWithProvider(it)) {
+                        onNavigate(Screen.Home)
+                    }
                 }
             }
         )

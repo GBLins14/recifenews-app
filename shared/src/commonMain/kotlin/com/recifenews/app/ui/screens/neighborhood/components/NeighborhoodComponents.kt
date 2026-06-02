@@ -1,5 +1,7 @@
 package com.recifenews.app.ui.screens.neighborhood.components
 
+import com.recifenews.app.ui.icons.AppIcons
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -77,7 +75,7 @@ internal fun NeighborhoodSetupScaffold(
                     modifier = Modifier.offset(x = (-12).dp)
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = AppIcons.ArrowBack,
                         contentDescription = "Voltar",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
@@ -139,7 +137,7 @@ internal fun NeighborhoodSearchField(
         placeholder = { Text(placeholder) },
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Search,
+                imageVector = AppIcons.Search,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
@@ -294,7 +292,7 @@ internal fun SelectionSummary(text: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = Icons.Default.CheckCircle,
+            imageVector = AppIcons.CheckCircle,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
         )

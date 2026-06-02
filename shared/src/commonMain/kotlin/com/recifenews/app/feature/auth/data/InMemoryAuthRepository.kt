@@ -1,5 +1,7 @@
 package com.recifenews.app.feature.auth.data
 
+import com.recifenews.app.feature.auth.domain.model.AuthResult
+import com.recifenews.app.feature.auth.domain.model.AuthSession
 import com.recifenews.app.feature.auth.domain.model.AuthUser
 import com.recifenews.app.feature.auth.domain.model.LoginRequest
 import com.recifenews.app.feature.auth.domain.model.RecoveryRequest
@@ -8,32 +10,52 @@ import com.recifenews.app.feature.auth.domain.model.SocialAuthProvider
 import com.recifenews.app.feature.auth.domain.repository.AuthRepository
 
 class InMemoryAuthRepository : AuthRepository {
-    override fun login(request: LoginRequest): AuthUser {
-        return AuthUser(
-            id = "user-${request.email.trim().lowercase()}",
-            name = "João Silva",
-            email = request.email.trim()
+    override suspend fun login(request: LoginRequest): AuthResult<AuthSession> {
+        return AuthResult.Success(
+            sessionFor(
+                user = AuthUser(
+                    id = "user-${request.email.trim().lowercase()}",
+                    name = "João Silva",
+                    email = request.email.trim()
+                )
+            )
         )
     }
 
-    override fun register(request: RegisterRequest): AuthUser {
-        return AuthUser(
-            id = "user-${request.email.trim().lowercase()}",
-            name = request.name.trim(),
-            email = request.email.trim()
+    override suspend fun register(request: RegisterRequest): AuthResult<AuthSession> {
+        return AuthResult.Success(
+            sessionFor(
+                user = AuthUser(
+                    id = "user-${request.email.trim().lowercase()}",
+                    name = request.name.trim(),
+                    email = request.email.trim()
+                )
+            )
         )
     }
 
-    override fun requestPasswordRecovery(request: RecoveryRequest): Boolean {
-        return request.email.isNotBlank()
+    override suspend fun requestPasswordRecovery(request: RecoveryRequest): AuthResult<Unit> {
+        return AuthResult.Success(Unit)
     }
 
-    override fun loginWithProvider(provider: SocialAuthProvider): AuthUser {
+    override suspend fun loginWithProvider(provider: SocialAuthProvider): AuthResult<AuthSession> {
         val providerName = provider.label.lowercase()
-        return AuthUser(
-            id = "social-$providerName",
-            name = "João Silva",
-            email = "joao@$providerName.com"
+        return AuthResult.Success(
+            sessionFor(
+                user = AuthUser(
+                    id = "social-$providerName",
+                    name = "João Silva",
+                    email = "joao@$providerName.com"
+                )
+            )
+        )
+    }
+
+    private fun sessionFor(user: AuthUser): AuthSession {
+        return AuthSession(
+            user = user,
+            accessToken = "dev-access-token-${user.id}",
+            refreshToken = "dev-refresh-token-${user.id}"
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.recifenews.app.ui.screens.auth.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import com.recifenews.app.ui.icons.AppIcons
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,13 +17,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +37,7 @@ import com.recifenews.app.ui.components.AppFeedback
 import com.recifenews.app.ui.components.AppTextField
 import com.recifenews.app.ui.components.SocialButton
 import com.recifenews.app.ui.theme.AppColors
+import com.recifenews.app.ui.theme.LocalThemeController
 import org.jetbrains.compose.resources.painterResource
 import recifenews.shared.generated.resources.Res
 import recifenews.shared.generated.resources.ic_apple
@@ -110,7 +105,7 @@ internal fun AuthBackButton(onBack: () -> Unit) {
             modifier = Modifier.offset(x = (-12).dp)
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                imageVector = AppIcons.ArrowBack,
                 contentDescription = "Voltar",
                 tint = MaterialTheme.colorScheme.onBackground
             )
@@ -134,7 +129,7 @@ internal fun AuthEmailField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Email,
+                imageVector = AppIcons.Email,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -155,7 +150,7 @@ internal fun AuthNameField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Person,
+                imageVector = AppIcons.Person,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -185,7 +180,7 @@ internal fun AuthPasswordField(
         isError = isError,
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Lock,
+                imageVector = AppIcons.Lock,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -193,7 +188,7 @@ internal fun AuthPasswordField(
         trailingIcon = {
             IconButton(onClick = onVisibilityToggle) {
                 Icon(
-                    imageVector = if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    imageVector = if (visible) AppIcons.VisibilityOff else AppIcons.Visibility,
                     contentDescription = if (visible) "Ocultar senha" else "Mostrar senha",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -231,7 +226,8 @@ internal fun SocialAuthButtons(
     appleText: String,
     onProviderClick: (SocialAuthProvider) -> Unit
 ) {
-    val appleIcon = if (isSystemInDarkTheme()) {
+    val themeController = LocalThemeController.current
+    val appleIcon = if (themeController.isDarkTheme) {
         painterResource(Res.drawable.ic_apple)
     } else {
         painterResource(Res.drawable.ic_apple_black)

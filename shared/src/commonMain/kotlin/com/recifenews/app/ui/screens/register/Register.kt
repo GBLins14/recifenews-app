@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -36,6 +37,7 @@ import com.recifenews.app.ui.screens.auth.components.AuthTitle
 import com.recifenews.app.ui.screens.auth.components.SocialAuthButtons
 import com.recifenews.app.ui.theme.AppColors
 import com.recifenews.app.ui.preview.AppPreview
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
@@ -47,6 +49,7 @@ fun RegisterScreen(
         RegisterStateHolder(dependencies.authRepository)
     }
     val state = stateHolder.state
+    val coroutineScope = rememberCoroutineScope()
 
     AuthScreenScaffold(showBack = true, onBack = onBack) {
         AuthTitle(
@@ -113,9 +116,12 @@ fun RegisterScreen(
             text = "Cadastrar",
             style = AppButtonStyle.Blue,
             enabled = state.canSubmit,
+            isLoading = state.isLoading,
             onClick = {
-                if (stateHolder.submit()) {
-                    onNavigate(Screen.NeighborhoodSelection)
+                coroutineScope.launch {
+                    if (stateHolder.submit()) {
+                        onNavigate(Screen.NeighborhoodSelection)
+                    }
                 }
             }
         )
@@ -130,8 +136,10 @@ fun RegisterScreen(
             googleText = "Registrar-se com Google",
             appleText = "Registrar-se com Apple",
             onProviderClick = {
-                if (stateHolder.registerWithProvider(it)) {
-                    onNavigate(Screen.NeighborhoodSelection)
+                coroutineScope.launch {
+                    if (stateHolder.registerWithProvider(it)) {
+                        onNavigate(Screen.NeighborhoodSelection)
+                    }
                 }
             }
         )

@@ -2,69 +2,149 @@ package com.recifenews.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val BrandPrimary = Color(0xFF0042CE)
-val BrandPrimaryLight = Color(0xFF4D88FF)
+// =========================
+// Brand
+// =========================
 
-val BrandSecondary = Color(0xFFFDB913)
-val BrandSecondaryLight = Color(0xFFFFD152)
+val LightPrimary = Color(0xFF0754C8)
+val LightOnPrimary = Color(0xFFFFFFFF)
 
-val LightBackground = Color(0xFFF9FAFB)
+val DarkPrimary = Color(0xFF4D8DFF)
+val DarkOnPrimary = Color(0xFF061A3A)
+
+// =========================
+// Accent / CTA
+// =========================
+
+val LightSecondary = Color(0xFFF6B51E)
+val LightOnSecondary = Color(0xFF1F2937)
+
+val DarkSecondary = Color(0xFFFFC83D)
+val DarkOnSecondary = Color(0xFF1F2937)
+
+// =========================
+// Light Theme
+// =========================
+
+val LightBackground = Color(0xFFF6F8FC)
+val LightOnBackground = Color(0xFF0F172A)
+
 val LightSurface = Color(0xFFFFFFFF)
-val LightSurfaceVariant = Color(0xFFF1F3F4)
+val LightOnSurface = Color(0xFF0F172A)
 
-val LightTextPrimary = Color(0xFF111827)
-val LightTextSecondary = Color(0xFF4B5563)
-val LightTextHint = Color(0xFF9CA3AF)
+val LightSurfaceVariant = Color(0xFFEFF4FA)
+val LightOnSurfaceVariant = Color(0xFF5B677A)
 
-val LightOutline = Color(0xFFE5E7EB)
+val LightCard = Color(0xFFFFFFFF)
+val LightCardHigh = Color(0xFFF9FBFE)
 
-val DarkBackground = Color(0xFF0F172A)
-val DarkSurface = Color(0xFF1E293B)
-val DarkSurfaceVariant = Color(0xFF334155)
+val LightInput = Color(0xFFFFFFFF)
+val LightInputBorder = Color(0xFFD8E1EE)
+
+val LightDivider = Color(0xFFE1E8F2)
+val LightBorder = Color(0xFFD8E1EE)
+
+val LightTextPrimary = Color(0xFF0F172A)
+val LightTextSecondary = Color(0xFF526071)
+val LightTextTertiary = Color(0xFF8A97A8)
+val LightTextInverse = Color(0xFFFFFFFF)
+
+val LightBottomBar = Color(0xFFFFFFFF)
+val LightBottomBarSelected = Color(0xFF0754C8)
+val LightBottomBarUnselected = Color(0xFF64748B)
+
+// =========================
+// Dark Theme
+// =========================
+
+val DarkBackground = Color(0xFF07111F)
+val DarkOnBackground = Color(0xFFF8FAFC)
+
+val DarkSurface = Color(0xFF101B2D)
+val DarkOnSurface = Color(0xFFF8FAFC)
+
+val DarkSurfaceVariant = Color(0xFF18263A)
+val DarkOnSurfaceVariant = Color(0xFFCBD5E1)
+
+val DarkCard = Color(0xFF101B2D)
+val DarkCardHigh = Color(0xFF18263A)
+
+val DarkInput = Color(0xFF101B2D)
+val DarkInputBorder = Color(0xFF33445F)
+
+val DarkDivider = Color(0xFF26364E)
+val DarkBorder = Color(0xFF33445F)
 
 val DarkTextPrimary = Color(0xFFF8FAFC)
 val DarkTextSecondary = Color(0xFFCBD5E1)
+val DarkTextTertiary = Color(0xFF94A3B8)
+val DarkTextInverse = Color(0xFF0F172A)
 
-val DarkOutline = Color(0xFF334155)
+val DarkBottomBar = Color(0xFF101B2D)
+val DarkBottomBarSelected = Color(0xFF66A3FF)
+val DarkBottomBarUnselected = Color(0xFFAAB7C8)
+
+// =========================
+// States
+// =========================
+
+val Success = Color(0xFF16A34A)
+val Warning = Color(0xFFF59E0B)
+val Error = Color(0xFFDC2626)
+val Info = Color(0xFF0284C7)
+
+// =========================
+// App Alerts
+// =========================
+
+val AlertRain = Color(0xFF0284C7)
+val AlertFlood = Color(0xFF2563EB)
+val AlertSecurity = Color(0xFFDC2626)
+val AlertTraffic = Color(0xFFF97316)
+val AlertEvent = Color(0xFF7C3AED)
+
+val LightScrim = Color(0x99000000)
+val DarkScrim = Color(0xCC000000)
+val Transparent = Color.Transparent
 
 object AppColors {
-    val White = Color(0xFFFFFFFF)
-    val Black = Color(0xFF000000)
-    val Transparent = Color.Transparent
+    val White = LightOnPrimary
+    val Black = LightTextPrimary
+    val Transparent = com.recifenews.app.ui.theme.Transparent
 
-    val BrandOnPrimary = White
-    val BrandOnPrimaryDark = Color(0xFF061A3A)
-    val BrandPrimaryContainer = Color(0xFFDCE7FF)
-    val BrandHeaderDark = Color(0xFF001F54)
-    val HeaderIconSelected = BrandSecondaryLight
+    val BrandOnPrimary = LightOnPrimary
+    val BrandOnPrimaryDark = DarkOnPrimary
+    val BrandPrimaryContainer = LightBottomBar
+    val BrandHeaderDark = LightPrimary
+    val HeaderIconSelected = LightSecondary
 
-    val Success = Color(0xFF10B981)
-    val Warning = Color(0xFFF59E0B)
-    val Error = Color(0xFFEF4444)
-    val Info = Color(0xFF3B82F6)
-    val ErrorContainer = Color(0xFFFFB4AB)
-    val OnErrorContainer = Color(0xFF690005)
+    val Success = com.recifenews.app.ui.theme.Success
+    val Warning = com.recifenews.app.ui.theme.Warning
+    val Error = com.recifenews.app.ui.theme.Error
+    val Info = com.recifenews.app.ui.theme.Info
+    val ErrorContainer = Error
+    val OnErrorContainer = LightOnPrimary
 
     val TextPrimary = LightTextPrimary
-    val TextSecondary = Color(0xFF6B7280)
-    val TextMuted = LightTextHint
-    val ButtonTextDark = Color(0xFF1F2937)
+    val TextSecondary = LightTextSecondary
+    val TextMuted = LightTextTertiary
+    val ButtonTextDark = LightOnSecondary
 
-    val FeedBackground = Color(0xFFF2F5FA)
-    val CardBorder = Color(0xFFE8EDF5)
-    val DisabledContainer = Color(0xFFE5E7EB)
-    val CategoryCommunity = Color(0xFF7C3AED)
+    val FeedBackground = LightBackground
+    val CardBorder = LightBorder
+    val DisabledContainer = LightSurfaceVariant
+    val CategoryCommunity = AlertEvent
 
-    val ReactionLike = Color(0xFF2563EB)
-    val ReactionLove = Color(0xFFE11D48)
+    val ReactionLike = AlertFlood
+    val ReactionLove = AlertSecurity
     val ReactionLaugh = Warning
-    val ReactionWow = CategoryCommunity
-    val ReactionSad = Color(0xFF0EA5E9)
+    val ReactionWow = AlertEvent
+    val ReactionSad = AlertRain
     val ReactionAngry = Error
 
-    val GlassWhite = White.copy(alpha = 0.1f)
-    val GlassBlack = Black.copy(alpha = 0.1f)
+    val GlassWhite = LightOnPrimary.copy(alpha = 0.1f)
+    val GlassBlack = LightTextPrimary.copy(alpha = 0.1f)
 
-    val ButtonYellow = Color(0xFFFDB913)
-    val ButtonBlue = Color(0xFF00369B)
+    val ButtonYellow = LightSecondary
+    val ButtonBlue = LightPrimary
 }

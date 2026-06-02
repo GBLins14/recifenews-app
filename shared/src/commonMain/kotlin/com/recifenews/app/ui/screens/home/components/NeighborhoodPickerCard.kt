@@ -25,10 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.recifenews.app.feature.home.domain.model.UserProfile
-import com.recifenews.app.ui.screens.home.CardBorder
-import com.recifenews.app.ui.screens.home.FeedBackground
 import com.recifenews.app.ui.screens.home.HomeBlue
-import com.recifenews.app.ui.screens.home.TextPrimary
+import com.recifenews.app.ui.screens.home.homePalette
 import com.recifenews.app.ui.theme.AppColors
 
 @Composable
@@ -38,18 +36,20 @@ internal fun NeighborhoodPickerCard(
     selectedNeighborhood: String,
     onNeighborhoodSelected: (String) -> Unit
 ) {
+    val colors = homePalette()
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.White),
-        border = BorderStroke(1.dp, CardBorder),
+        colors = CardDefaults.cardColors(containerColor = colors.card),
+        border = BorderStroke(1.dp, colors.cardBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Text(
                 text = "Selecionar bairro",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
-                color = TextPrimary
+                color = colors.textPrimary
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -120,13 +120,15 @@ private fun NeighborhoodButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colors = homePalette()
+
     Box(
         modifier = modifier
             .height(38.dp)
             .clip(RoundedCornerShape(14.dp))
-            .background(if (selected) HomeBlue else FeedBackground)
+            .background(if (selected) colors.accentStrong else colors.subtleSurface)
             .border(
-                BorderStroke(1.dp, if (selected) HomeBlue else CardBorder),
+                BorderStroke(1.dp, if (selected) colors.accentStrong else colors.cardBorder),
                 RoundedCornerShape(14.dp)
             )
             .clickable(onClick = onClick)
@@ -136,7 +138,7 @@ private fun NeighborhoodButton(
         Text(
             text = neighborhood,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-            color = if (selected) AppColors.White else TextPrimary,
+            color = if (selected) AppColors.White else colors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

@@ -17,9 +17,12 @@ data class HomeUiState(
     val commentDrafts: Map<Int, String> = emptyMap(),
     val selectedNeighborhood: String,
     val selectedTab: FeedTab = FeedTab.Todos,
+    val selectedNavigationItem: HomeNavigationItem = HomeNavigationItem.Home,
+    val selectedFeedCategoryId: String? = null,
     val searchQuery: String = "",
-    val showSearch: Boolean = false,
+    val showSearchPanel: Boolean = false,
     val showNeighborhoodPicker: Boolean = false,
+    val showComposer: Boolean = false,
     val newPostText: String = "",
     val selectedCategoryId: String,
     val feedback: String? = null
@@ -31,6 +34,7 @@ data class HomeUiState(
         get() {
             val searched = posts
                 .filter { post -> post.neighborhood == selectedNeighborhood }
+                .filter { post -> selectedFeedCategoryId == null || post.category.id == selectedFeedCategoryId }
                 .filter { post ->
                     val text = "${post.author} ${post.neighborhood} ${post.category.label} ${post.body}"
                     text.contains(searchQuery, ignoreCase = true)
@@ -79,3 +83,12 @@ data class PostInteraction(
     val showComments: Boolean = false,
     val showShareOptions: Boolean = false
 )
+
+enum class HomeNavigationItem {
+    Home,
+    Community,
+    Neighborhoods,
+    NewPost,
+    Alerts,
+    Profile
+}

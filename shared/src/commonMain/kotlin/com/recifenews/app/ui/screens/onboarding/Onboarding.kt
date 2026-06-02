@@ -3,7 +3,6 @@ package com.recifenews.app.ui.screens.onboarding
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -24,8 +23,9 @@ import com.recifenews.app.navigation.Screen
 import com.recifenews.app.ui.screens.onboarding.components.OnboardingFooter
 import com.recifenews.app.ui.screens.onboarding.components.OnboardingHeader
 import com.recifenews.app.ui.screens.onboarding.components.OnboardingPageContent
-import com.recifenews.app.ui.theme.AppColors
 import com.recifenews.app.ui.preview.AppPreview
+import com.recifenews.app.ui.theme.AppColors
+import com.recifenews.app.ui.theme.LocalThemeController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,10 +40,11 @@ fun OnboardingScreen(
     val state = stateHolder.state
     val pagerState = rememberPagerState(pageCount = { state.pages.size })
     val coroutineScope = rememberCoroutineScope()
+    val themeController = LocalThemeController.current
 
     val isFirstPage = pagerState.currentPage == 0
     val backgroundColor by animateColorAsState(
-        targetValue = if (isFirstPage && isSystemInDarkTheme() == false) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
+        targetValue = if (isFirstPage && !themeController.isDarkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
         animationSpec = spring(stiffness = 500f)
     )
     val contentColor = if (isFirstPage) AppColors.White else MaterialTheme.colorScheme.onBackground

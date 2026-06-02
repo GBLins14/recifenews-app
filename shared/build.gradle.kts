@@ -1,4 +1,8 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi::class)
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
+import java.net.URI
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,7 +13,24 @@ plugins {
 }
 
 kotlin {
-    
+    val iosTargets = listOf(
+        iosArm64(),
+        iosX64(),
+        iosSimulatorArm64()
+    )
+
+    iosTargets.forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "Shared"
+            isStatic = true
+            disableNativeCache(
+                version = DisableCacheInKotlinVersion.`2_3_21`,
+                reason = "Local iOS simulator debug builds are faster and more reliable without native cache generation.",
+                issueUrl = URI("https://kotl.in/issue")
+            )
+        }
+    }
+
     androidLibrary {
        namespace = "com.recifenews.app.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -41,9 +62,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.compose.materialIconsExtended)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -1,5 +1,8 @@
 package com.recifenews.app.ui.screens.home.components
 
+import com.recifenews.app.ui.icons.AppIcons
+
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,8 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,14 +37,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.recifenews.app.feature.home.domain.model.FeedCategory
 import com.recifenews.app.feature.home.domain.model.UserProfile
-import com.recifenews.app.ui.screens.home.CardBorder
-import com.recifenews.app.ui.screens.home.FeedBackground
-import com.recifenews.app.ui.screens.home.HomeBlue
-import com.recifenews.app.ui.screens.home.TextPrimary
-import com.recifenews.app.ui.screens.home.TextSecondary
+import com.recifenews.app.ui.screens.home.homePalette
 import com.recifenews.app.ui.screens.home.initialsFrom
 import com.recifenews.app.ui.theme.AppColors
 
@@ -51,116 +49,151 @@ import com.recifenews.app.ui.theme.AppColors
 internal fun QuickPostComposer(
     user: UserProfile,
     neighborhood: String,
+    expanded: Boolean,
     value: String,
     categories: List<FeedCategory>,
     selectedCategoryId: String,
+    onExpand: () -> Unit,
     onValueChange: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onPublish: () -> Unit
 ) {
+    val colors = homePalette()
+
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = AppColors.White),
-        border = BorderStroke(1.dp, CardBorder),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = colors.card),
+        border = BorderStroke(1.dp, colors.cardBorder),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Avatar(initials = initialsFrom(user.name), color = HomeBlue)
-                Spacer(modifier = Modifier.width(10.dp))
-                Column(modifier = Modifier.weight(1f)) {
+                Avatar(initials = initialsFrom(user.name), color = colors.accentStrong)
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(colors.subtleSurface)
+                        .clickable(enabled = !expanded, onClick = onExpand)
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
+                ) {
                     Text(
-                        text = "Criar publicação",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Black),
-                        color = TextPrimary
+                        text = "Compartilhar atualização",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        color = colors.textPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "$neighborhood · Público",
+                        text = "$neighborhood · agora",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary
+                        color = colors.textSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
                 Box(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
-                        .background(HomeBlue.copy(alpha = 0.1f)),
+                        .background(colors.accentStrong)
+                        .clickable(onClick = onExpand),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = HomeBlue,
-                        modifier = Modifier.size(20.dp)
+                        imageVector = if (expanded) AppIcons.Close else AppIcons.Add,
+                        contentDescription = if (expanded) "Fechar criação de post" else "Novo post",
+                        tint = AppColors.White,
+                        modifier = Modifier.size(19.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            AnimatedVisibility(visible = expanded) {
+                Column {
+                    Spacer(modifier = Modifier.height(9.dp))
 
-            OutlinedTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "No que você está pensando?",
-                        color = AppColors.TextMuted
+                    OutlinedTextField(
+                        value = value,
+                        onValueChange = onValueChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = {
+                            Text(
+                                text = "O que está acontecendo no bairro?",
+                                color = colors.textMuted
+                            )
+                        },
+                        minLines = 3,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = colors.textPrimary,
+                            unfocusedTextColor = colors.textPrimary,
+                            cursorColor = colors.accentStrong,
+                            focusedBorderColor = colors.accentStrong.copy(alpha = 0.4f),
+                            unfocusedBorderColor = colors.cardBorder,
+                            focusedContainerColor = colors.subtleSurface,
+                            unfocusedContainerColor = colors.subtleSurface
+                        )
                     )
-                },
-                minLines = 2,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                shape = RoundedCornerShape(16.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = HomeBlue.copy(alpha = 0.4f),
-                    unfocusedBorderColor = CardBorder,
-                    focusedContainerColor = FeedBackground,
-                    unfocusedContainerColor = FeedBackground
-                )
-            )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                categories.forEach { category ->
-                    CategoryChip(
-                        text = category.label,
-                        selected = selectedCategoryId == category.id,
-                        onClick = { onCategorySelected(category.id) }
-                    )
-                }
-            }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        categories.forEach { category ->
+                            CategoryChip(
+                                text = category.label,
+                                selected = selectedCategoryId == category.id,
+                                onClick = { onCategorySelected(category.id) }
+                            )
+                        }
+                    }
 
-            Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Foto/Vídeo · Localização · Enquete",
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                    color = TextSecondary,
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = onPublish,
-                    enabled = value.isNotBlank(),
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = HomeBlue,
-                        disabledContentColor = AppColors.TextMuted
-                    )
-                ) {
-                    Text(
-                        text = "Publicar",
-                        fontWeight = FontWeight.Black
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Publicar em $neighborhood",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.textSecondary,
+                            modifier = Modifier.weight(1f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        TextButton(
+                            onClick = onPublish,
+                            enabled = value.isNotBlank(),
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = colors.accentStrong,
+                                disabledContentColor = colors.textMuted
+                            )
+                        ) {
+                            Icon(
+                                imageVector = AppIcons.Send,
+                                contentDescription = null,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = "Publicar",
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -174,7 +207,7 @@ internal fun Avatar(
 ) {
     Box(
         modifier = Modifier
-            .size(42.dp)
+            .size(36.dp)
             .clip(CircleShape)
             .background(color.copy(alpha = 0.16f)),
         contentAlignment = Alignment.Center
@@ -193,19 +226,21 @@ private fun CategoryChip(
     selected: Boolean,
     onClick: () -> Unit
 ) {
+    val colors = homePalette()
+
     Box(
         modifier = Modifier
-            .height(32.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(if (selected) HomeBlue else FeedBackground)
+            .height(26.dp)
+            .clip(RoundedCornerShape(13.dp))
+            .background(if (selected) colors.accentStrong else colors.subtleSurface)
             .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 9.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-            color = if (selected) AppColors.White else AppColors.TextSecondary
+            color = if (selected) AppColors.White else colors.textSecondary
         )
     }
 }

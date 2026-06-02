@@ -7,52 +7,66 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.dp
 
 private val LightColorScheme = lightColorScheme(
-    primary = BrandPrimary,
-    onPrimary = AppColors.BrandOnPrimary,
-    primaryContainer = AppColors.BrandPrimaryContainer,
-    onPrimaryContainer = BrandPrimary,
-    
-    secondary = BrandSecondary,
-    onSecondary = LightTextPrimary,
-    
+    primary = LightPrimary,
+    onPrimary = LightOnPrimary,
+
+    secondary = LightSecondary,
+    onSecondary = LightOnSecondary,
+
     background = LightBackground,
-    onBackground = LightTextPrimary,
-    
+    onBackground = LightOnBackground,
+
     surface = LightSurface,
-    onSurface = LightTextPrimary,
-    
+    onSurface = LightOnSurface,
+
     surfaceVariant = LightSurfaceVariant,
-    onSurfaceVariant = LightTextSecondary,
-    
-    outline = LightOutline,
-    error = AppColors.Error,
-    onError = AppColors.White
+    onSurfaceVariant = LightOnSurfaceVariant,
+
+    outline = LightBorder,
+    outlineVariant = LightDivider,
+
+    error = Error,
+    onError = LightOnPrimary,
+
+    inverseSurface = DarkSurface,
+    inverseOnSurface = DarkOnSurface,
+    inversePrimary = DarkPrimary,
+
+    scrim = LightScrim
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = BrandPrimaryLight,
-    onPrimary = AppColors.BrandOnPrimaryDark,
-    primaryContainer = BrandPrimary,
-    onPrimaryContainer = AppColors.White,
-    
-    secondary = BrandSecondary,
-    onSecondary = AppColors.Black,
-    
+    primary = DarkPrimary,
+    onPrimary = DarkOnPrimary,
+
+    secondary = DarkSecondary,
+    onSecondary = DarkOnSecondary,
+
     background = DarkBackground,
-    onBackground = DarkTextPrimary,
-    
+    onBackground = DarkOnBackground,
+
     surface = DarkSurface,
-    onSurface = DarkTextPrimary,
-    
+    onSurface = DarkOnSurface,
+
     surfaceVariant = DarkSurfaceVariant,
-    onSurfaceVariant = DarkTextSecondary,
-    
-    outline = DarkOutline,
-    error = AppColors.ErrorContainer,
-    onError = AppColors.OnErrorContainer
+    onSurfaceVariant = DarkOnSurfaceVariant,
+
+    outline = DarkBorder,
+    outlineVariant = DarkDivider,
+
+    error = Error,
+    onError = DarkOnPrimary,
+
+    inverseSurface = LightSurface,
+    inverseOnSurface = LightOnSurface,
+    inversePrimary = LightPrimary,
+
+    scrim = DarkScrim
 )
 
 // Premium Shapes
@@ -76,4 +90,40 @@ fun AppTheme(
         shapes = AppShapes,
         content = content
     )
+}
+
+@Composable
+fun RecifeNewsTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    AppTheme(darkTheme = darkTheme, content = content)
+}
+
+data class ThemeController(
+    val isDarkTheme: Boolean,
+    val onToggleDarkTheme: () -> Unit
+)
+
+val LocalThemeController = staticCompositionLocalOf {
+    ThemeController(
+        isDarkTheme = false,
+        onToggleDarkTheme = {}
+    )
+}
+
+@Composable
+fun ProvideThemeController(
+    isDarkTheme: Boolean,
+    onToggleDarkTheme: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    CompositionLocalProvider(
+        LocalThemeController provides ThemeController(
+            isDarkTheme = isDarkTheme,
+            onToggleDarkTheme = onToggleDarkTheme
+        )
+    ) {
+        content()
+    }
 }
