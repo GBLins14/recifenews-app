@@ -58,7 +58,7 @@ class HomeStateHolder(
             )
             HomeNavigationItem.Neighborhoods -> state.copy(
                 selectedNavigationItem = item,
-                showNeighborhoodPicker = !state.showNeighborhoodPicker,
+                showNeighborhoodPicker = false,
                 showSearchPanel = false,
                 showComposer = false
             )

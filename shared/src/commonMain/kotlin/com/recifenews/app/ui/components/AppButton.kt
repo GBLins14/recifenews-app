@@ -47,7 +47,7 @@ fun AppButton(
     }
 
     val contentColor = when (style) {
-        AppButtonStyle.Yellow -> AppColors.ButtonTextDark
+        AppButtonStyle.Yellow -> AppColors.White
         AppButtonStyle.Blue -> AppColors.White
         AppButtonStyle.Ghost -> MaterialTheme.colorScheme.primary
         AppButtonStyle.YellowOutlined -> AppColors.ButtonYellow

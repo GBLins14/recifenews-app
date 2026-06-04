@@ -62,11 +62,15 @@ import com.recifenews.app.feature.home.ui.state.HomeNavigationItem
 import com.recifenews.app.feature.home.ui.state.HomeStateHolder
 import com.recifenews.app.feature.home.ui.state.HomeUiState
 import com.recifenews.app.feature.home.ui.state.PostInteraction
+import com.recifenews.app.feature.map.ui.state.LiveMapStateHolder
+import com.recifenews.app.feature.map.ui.state.LiveMapUiState
 import com.recifenews.app.navigation.Screen
 import com.recifenews.app.ui.screens.home.components.FeedFeedback
 import com.recifenews.app.ui.screens.home.components.HomeBottomNavigation
 import com.recifenews.app.ui.screens.home.components.NeighborhoodPickerCard
 import com.recifenews.app.ui.screens.home.components.QuickPostComposer
+import com.recifenews.app.ui.screens.map.LiveMapActions
+import com.recifenews.app.ui.screens.map.LiveMapPanel
 import com.recifenews.app.ui.preview.AppPreview
 import org.jetbrains.compose.resources.painterResource
 
@@ -79,9 +83,13 @@ fun HomeScreen(
     val stateHolder = remember(dependencies.homeFeedRepository) {
         HomeStateHolder(dependencies.homeFeedRepository)
     }
+    val mapStateHolder = remember(dependencies.liveMapRepository) {
+        LiveMapStateHolder(dependencies.liveMapRepository)
+    }
 
     HomeContent(
         state = stateHolder.state,
+        mapState = mapStateHolder.state,
         actions = HomeActions(
             onSearchToggle = stateHolder::toggleSearchPanel,
             onSearchChange = stateHolder::onSearchChanged,
@@ -103,6 +111,12 @@ fun HomeScreen(
             onShareToggle = stateHolder::toggleShareOptions,
             onShareSelected = stateHolder::sharePost,
             onSaveToggle = stateHolder::toggleSave
+        ),
+        mapActions = LiveMapActions(
+            onFilterSelected = mapStateHolder::selectFilter,
+            onSearchToggle = mapStateHolder::toggleSearch,
+            onSearchChange = mapStateHolder::onSearchChanged,
+            onRefresh = mapStateHolder::refresh
         )
     )
 }
@@ -110,9 +124,15 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     state: HomeUiState,
-    actions: HomeActions
+    mapState: LiveMapUiState,
+    actions: HomeActions,
+    mapActions: LiveMapActions
 ) {
     val colors = homePalette()
+    val showMap = state.selectedNavigationItem == HomeNavigationItem.Neighborhoods &&
+        !state.showNeighborhoodPicker &&
+        !state.showComposer &&
+        !state.showSearchPanel
 
     Surface(
         color = colors.feedBackground,
@@ -128,6 +148,17 @@ private fun HomeContent(
                 )
             }
         ) { innerPadding ->
+            if (showMap) {
+                LiveMapPanel(
+                    state = mapState,
+                    actions = mapActions,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                )
+                return@Scaffold
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()

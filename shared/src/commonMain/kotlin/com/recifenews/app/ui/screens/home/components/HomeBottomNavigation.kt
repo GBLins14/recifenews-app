@@ -5,6 +5,7 @@ import com.recifenews.app.ui.icons.AppIcons
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,10 +40,10 @@ internal fun HomeBottomNavigation(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = colors.bottomBar,
+        color = colors.card,
         border = BorderStroke(1.dp, colors.bottomBarBorder),
         tonalElevation = 0.dp,
-        shadowElevation = 10.dp
+        shadowElevation = 12.dp
     ) {
         Column(
             modifier = Modifier
@@ -51,10 +53,10 @@ internal fun HomeBottomNavigation(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(62.dp)
-                    .padding(horizontal = 6.dp, vertical = 6.dp),
+                    .height(58.dp)
+                    .padding(horizontal = 8.dp, vertical = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 BottomNavAction(
                     label = "Início",
@@ -63,16 +65,13 @@ internal fun HomeBottomNavigation(
                     onClick = { onItemSelected(HomeNavigationItem.Home) }
                 )
                 BottomNavAction(
-                    label = "Comunidade",
-                    icon = AppIcons.Groups,
-                    selected = selectedItem == HomeNavigationItem.Community,
-                    onClick = { onItemSelected(HomeNavigationItem.Community) }
-                )
-                BottomNavAction(
-                    label = "Bairros",
+                    label = "Mapa",
                     icon = AppIcons.LocationOn,
                     selected = selectedItem == HomeNavigationItem.Neighborhoods,
                     onClick = { onItemSelected(HomeNavigationItem.Neighborhoods) }
+                )
+                CreatePostAction(
+                    onClick = { onItemSelected(HomeNavigationItem.NewPost) }
                 )
                 BottomNavAction(
                     label = "Alertas",
@@ -92,6 +91,41 @@ internal fun HomeBottomNavigation(
 }
 
 @Composable
+private fun RowScope.CreatePostAction(
+    onClick: () -> Unit
+) {
+    val colors = homePalette()
+
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .height(48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Surface(
+            modifier = Modifier
+                .size(43.dp)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
+            shape = CircleShape,
+            color = colors.accentStrong,
+            contentColor = colors.onAccent,
+            tonalElevation = 0.dp,
+            shadowElevation = 6.dp
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = AppIcons.Add,
+                    contentDescription = "Criar post",
+                    tint = colors.onAccent,
+                    modifier = Modifier.size(25.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun RowScope.BottomNavAction(
     label: String,
     icon: ImageVector,
@@ -104,10 +138,10 @@ private fun RowScope.BottomNavAction(
     Column(
         modifier = Modifier
             .weight(1f)
-            .height(48.dp)
-            .clip(RoundedCornerShape(14.dp))
+            .height(47.dp)
+            .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 1.dp, vertical = 4.dp),
+            .padding(horizontal = 2.dp, vertical = 3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -115,11 +149,11 @@ private fun RowScope.BottomNavAction(
             imageVector = icon,
             contentDescription = label,
             tint = contentColor,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(19.dp)
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium),
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold),
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

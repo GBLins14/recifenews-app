@@ -24,6 +24,7 @@ object AppIcons {
     val Home by lazyIcon("Home", "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z")
     val KeyboardArrowDown by lazyIcon("KeyboardArrowDown", "M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z")
     val KeyboardArrowRight by lazyIcon("KeyboardArrowRight", "M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z")
+    val Layers by lazyIcon("Layers", "M11.99 18.54 4.62 12.8 3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16zm0-11.47L17.74 9 12 13.47 6.26 9 12 4.53z")
     val LocationOn by lazyIcon("LocationOn", "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z")
     val Lock by lazyIcon("Lock", "M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z")
     val MoreHoriz by lazyIcon("MoreHoriz", "M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z")
