@@ -1,4 +1,4 @@
-rootProject.name = "RecifeNews"
+rootProject.name = "RecifeEmAlerta"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

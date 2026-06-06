@@ -298,8 +298,8 @@
 					"-framework",
 					Shared,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.recifenews.app.ios;
-				PRODUCT_NAME = "Recife News";
+				PRODUCT_BUNDLE_IDENTIFIER = com.recifeemalerta.app.ios;
+				PRODUCT_NAME = "Recife em Alerta";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -330,8 +330,8 @@
 					"-framework",
 					Shared,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.recifenews.app.ios;
-				PRODUCT_NAME = "Recife News";
+				PRODUCT_BUNDLE_IDENTIFIER = com.recifeemalerta.app.ios;
+				PRODUCT_NAME = "Recife em Alerta";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

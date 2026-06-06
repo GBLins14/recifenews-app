@@ -32,7 +32,7 @@ kotlin {
     }
 
     androidLibrary {
-       namespace = "com.recifenews.app.shared"
+       namespace = "com.recifeemalerta.app.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
     

@@ -21,7 +21,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.recifenews.app"
+    namespace = "com.recifeemalerta.app"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     signingConfigs {
@@ -39,7 +39,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId = "com.recifenews.app"
+        applicationId = "com.recifeemalerta.app"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

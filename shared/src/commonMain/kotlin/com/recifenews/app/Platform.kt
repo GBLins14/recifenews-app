@@ -1,7 +1,0 @@
-package com.recifenews.app
-
-interface Platform {
-    val name: String
-}
-
-expect fun getPlatform(): Platform
